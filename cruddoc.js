@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 var mongoose = require("mongoose");
 var area = mongoose.connect('mongodb://localhost/areas', {
   useMongoClient: true,
@@ -6,7 +6,9 @@ var area = mongoose.connect('mongodb://localhost/areas', {
 mongoose.Promise = global.Promise;
 
 let locSchema = new mongoose.Schema({
+docname: { type : String},	
   name : { type: String },
+  mobilno:{type : String},
   category : { type: String }, 
   location : {
     coordinates: { type: [Number], index: '2dsphere' }
@@ -22,10 +24,12 @@ mongoose.connect('mongodb://localhost/areas',{
 var bapu={}
 //CRUD operations
 
-var createArea = function(name, category, long, lat) {
+var createArea = function(docname,name,mobileno,category, long, lat) {
 	let query = {
-		name: name,
-		category: category,
+		docname:docname,
+		name:name,
+		mobileno:mobileno,
+		category:category,
 		location: {
 			coordinates: [long, lat] 
 		}
@@ -35,13 +39,21 @@ var createArea = function(name, category, long, lat) {
 			return result;
 		});
 };
-
+let namu=""
 var findArea = function(query) {
 	return AreaModel.find(query)
 		.then(function(result){
 			return result;
 		})
 };
+
+var finddr = function(name){
+	return AreaModel.find(name)
+	.then(function(result){
+		return result;
+	})
+};
+
 
 var updateArea = function(findQuery, setQuery) {
 	let updateQuery = {
@@ -71,6 +83,10 @@ var deleteArea = function(query) {
  */
 var findNearByAreas = function(longitude, latitude, radiusInMtrs) {
 	var geoNearQuery = {
+		docname:"",
+		name:"",
+		mobileno:"",
+		category:"",
 		spherical: true,
 		maxDistance: radiusInMtrs, 
 		distanceMultiplier: 0.001, //to convert back into KMs otherwise it will give in mtrs
@@ -92,6 +108,7 @@ bapu['findArea'] = findArea
 bapu['updateArea'] = updateArea
 bapu['deleteArea'] = deleteArea
 bapu['findNearByAreas'] = findNearByAreas
+bapu['finddr']=finddr
 module.exports=bapu;
 /*
 //Run functions
