@@ -30,10 +30,12 @@ console.log(data.results[0].geometry.location.lng);
 var a=data.results[0].geometry.location.lng;
 var b=data.results[0].geometry.location.lat;
 var radius = 30 * 1000 ;
-var cr = cruddoc.findNearByAreas(a,b,radius);
-console.log(cr);
-var xy= cruddoc.findArea(cr);
-console.log(xy);
+var cr = cruddoc.findNearByAreas(a,b,radius,function(data){
+    console.log(data);
+});
+
+//var xy= cruddoc.findArea(cr);
+//console.log(xy);
 });
 });
 app.get("/doctors/new",function(req,res){

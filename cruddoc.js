@@ -81,7 +81,7 @@ var deleteArea = function(query) {
  * @param  {[Number]} radius in meters  
  * @return {[Object]} nearby area documents          
  */
-var findNearByAreas = function(longitude, latitude, radiusInMtrs) {
+var findNearByAreas = function(longitude, latitude, radiusInMtrs,callback) {
 	var geoNearQuery = {
 		docname:"",
 		name:"",
@@ -97,9 +97,11 @@ var findNearByAreas = function(longitude, latitude, radiusInMtrs) {
     	distanceField: 'calculatedDistance'
 	};
 	console.log(JSON.stringify(geoNearQuery));
-	return AreaModel.aggregate([{'$geoNear' : geoNearQuery}]).exec()
+	  AreaModel.aggregate([{'$geoNear' : geoNearQuery}]).exec()
 		.then(function(results) {
-			return results;
+			//console.log(results);
+			callback(results);
+		
 		})
 };
 
